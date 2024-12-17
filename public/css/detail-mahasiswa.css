@@ -1,0 +1,50 @@
+.timeline {
+    border-left: 3px solid #ccc;
+    margin: 20px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.timeline-item {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: #5aadc2;
+    border-radius: 50%;
+    position: absolute;
+    left: -30px;
+    top: 5px;
+}
+
+.timeline-date {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.timeline-content {
+    background: #f9f9f9;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.timeline-btn {
+    margin-top: 10px;
+    background-color: #5aadc2;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.timeline-btn:hover {
+    background-color: #489bb5;
+}

@@ -1,0 +1,64 @@
+/* Warna hitam untuk background sidebar */
+.sidebar-dark-custom {
+    background-color: #5c5353 !important; /* Warna hitam */
+    color: #ffffff !important; /* Warna teks putih */
+}
+
+/* Warna link sidebar */
+.sidebar-dark-custom .nav-sidebar .nav-link {
+    background-color: transparent !important; /* Background transparan untuk link */
+    color: #ffffff !important; /* Warna teks aksen */
+}
+
+/* Warna link saat hover */
+.sidebar-dark-custom .nav-sidebar .nav-link:hover {
+    background-color: #7d9da5 !important; /* Warna hover */
+    color: #ffffff !important; /* Warna teks putih saat hover */
+}
+
+/* Warna link aktif */
+.sidebar-dark-custom .nav-sidebar .nav-link.active {
+    background-color: #5aadc2 !important; /* Warna background aktif */
+    color: #ffffff !important; /* Warna teks putih untuk link aktif */
+}
+
+/* Styling untuk navbar-gray */
+.navbar-gray {
+    background-color: #e4e7e8 !important; /* Warna latar belakang */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Border bawah tipis */
+    box-shadow: 0px 2px 3px rgba(90, 173, 194, 0.54); /* Shadow di bawah navbar */
+    color: #333; /* Warna teks */
+}
+
+.navbar-gray .navbar-brand {
+    color: #333 !important; /* Warna teks untuk brand */
+}
+
+.navbar-gray .nav-link {
+    color: #333 !important; /* Warna teks untuk link */
+}
+
+.navbar-gray .nav-link:hover {
+    color: #5aadc2 !important; /* Warna teks saat hover */
+}
+
+.navbar-gray .navbar-toggler {
+    border-color: rgba(0, 0, 0, 0.1); /* Border tombol toggle */
+}
+
+.navbar-gray .dropdown-menu {
+    background-color: #f8f9fa; /* Warna dropdown menu */
+    box-shadow: 0px 4px 6px rgba(90, 173, 194, 0.54); /* Shadow dropdown */
+}
+
+/* Styling untuk select button */
+.form-select-sm {
+    border: 1px solid #ced4da !important; /* Warna border default */
+    border-radius: 5px !important; /* Border yang lebih halus */
+}
+
+/* Fokus (focus) pada select button */
+.form-select-sm:focus {
+    outline: none !important; /* Hilangkan outline default */
+    border-color: #5aadc2 !important; /* Warna border saat fokus */
+}

@@ -1,0 +1,38 @@
+body {
+    font-family: "Source Sans 3", sans-serif; /* Font */
+    font-size: 15px; /* Ukuran font */
+    color: #484444;
+}
+
+/* Styling untuk Select2 dropdown */
+.select2-results__option--highlighted {
+    background-color: rgb(52, 121, 138) !important; /* Warna background */
+    color: #fff !important; /* Warna teks */
+}
+
+.select2-results__option {
+    padding: 10px !important; /* Jarak dalam opsi */
+}
+
+.form-inline {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-inline .form-control {
+    margin-left: 10px;
+}
+
+/* Membuat form pencarian inline di kanan */
+.form-inline .col-md-1,
+.form-inline .col-md-3,
+.form-inline .col-md-2 {
+    margin-bottom: 0;
+}
+/* Ubah tinggi dropdown */
+.select2-container--default .select2-selection--single {
+    height: 40px; /* Tinggi dropdown */
+    line-height: 40px; /* Vertical alignment */
+    align-items: center;
+    display: flex;
+}
