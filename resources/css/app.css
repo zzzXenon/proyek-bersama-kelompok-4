@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f8ff;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  background-color: #3a81f1;
+  color: white;
+  padding: 10px 20px;
+}
+
+.sidebar {
+  background-color: #2d6dc7;
+  color: white;
+  padding: 15px;
+}
