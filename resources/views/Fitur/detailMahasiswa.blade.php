@@ -60,11 +60,10 @@
   
                         @case('New Comment Added')
                             <p>{{ $log->details }}</p>
-                            <a href="{{ route('pelanggaranMahasiswa.detail', $log->pelanggaran_id) }}" 
-                               class="btn btn-sm mt-2" 
-                               style="background-color: #5AADC2; color: white;">
-                               Lihat
-                            </a>
+                            @break
+
+                        @case('Level Updated')
+                            <p>{{ $log->details }}</p>
                             @break
   
                         @case('Update Status')

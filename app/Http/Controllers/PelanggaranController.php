@@ -143,21 +143,19 @@ class PelanggaranController extends Controller
 
     public function showDetailMahasiswa($id)
     {
-        // Retrieve the pelanggaran record by its ID
         $pelanggaran = Pelanggaran::findOrFail($id);
 
         // Fetch logs with user data (role and name) using a join on the 'users' table
         $pelanggaranLogs = PelanggaranLog::where('pelanggaran_id', $id)
             ->join('users', 'pelanggaran_logs.user_id', '=', 'users.id')  // Join the 'users' table
             ->select(
-                'pelanggaran_logs.*',  // Select all columns from pelanggaran_logs
-                'users.nama as user_nama',  // Select 'nama' as 'user_nama' from the users table
-                'users.role as user_role'  // Select 'role' as 'user_role' from the users table
+                'pelanggaran_logs.*',
+                'users.nama as user_nama',
+                'users.role as user_role'
             )
             ->orderBy('pelanggaran_logs.created_at', 'desc')
             ->get();
 
-        // Pass the data to the view
         return view('fitur.detailMahasiswa', [
             'pelanggaran' => $pelanggaran,
             'pelanggaranLogs' => $pelanggaranLogs
@@ -166,7 +164,6 @@ class PelanggaranController extends Controller
 
     public function showComments($id)
     {
-        // Fetch the pelanggaran record with related comments, user, and listPelanggaran data
         $pelanggaran = Pelanggaran::with(['user', 'listPelanggaran', 'comments.user'])->findOrFail($id);
 
         // Get the level attribute and the currently authenticated user
@@ -193,7 +190,6 @@ class PelanggaranController extends Controller
             return view('fitur.detailAdmin-no-response', compact('pelanggaran'));
         }
 
-        // If authorized, show the comments page
         return view('fitur.detailPelanggaran', compact('pelanggaran'));
     }
 
@@ -201,7 +197,7 @@ class PelanggaranController extends Controller
     {
         $request->validate([
             'comment' => 'required|string|max:500',
-            'file' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // Optional file validation
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         $pelanggaran = Pelanggaran::findOrFail($id);
@@ -231,38 +227,18 @@ class PelanggaranController extends Controller
         if ($request->user()->role === 'Dosen' && $pelanggaran->level === 'Level 1') {
             // Update level to 'Level 2'
             $pelanggaran->level = 'Level 2';
-            PelanggaranLog::create([
-                'pelanggaran_id' => $pelanggaran->id,
-                'user_id' => $request->user()->id,
-                'action' => 'Level Updated',
-                'details' => 'Level changed to Level 2 by Dosen Wali',
-            ]);
         }
 
         // Check if the user is 'Komisi Disiplin' and the current level is 'Level 3'
         if ($request->user()->role === 'Komisi Disiplin' && $pelanggaran->level === 'Level 3') {
             // Update level to 'Level 3'
             $pelanggaran->level = 'Level 4';
-            PelanggaranLog::create([
-                'pelanggaran_id' => $pelanggaran->id,
-                'user_id' => $request->user()->id,
-                'action' => 'Level Updated',
-                'details' => 'Level changed to Level 4 by Komisi Disiplin',
-            ]);
         }
 
         // Check if the user is 'Rektor' and the current level is 'Level 4'
         if ($request->user()->role === 'Rektor' && $pelanggaran->level === 'Level 4') {
             // Update status to 'Selesai'
             $pelanggaran->status = 'Selesai';
-
-            // Log the status update
-            PelanggaranLog::create([
-                'pelanggaran_id' => $pelanggaran->id,
-                'user_id' => $request->user()->id,
-                'action' => 'Status Updated',
-                'details' => 'Status changed to Selesai by Rektor',
-            ]);
 
             // Now update the level using the existing updateLevel method
             $this->updateLevel($request, $pelanggaran); // Calls the updateLevel method to transition to 'Level 5'
