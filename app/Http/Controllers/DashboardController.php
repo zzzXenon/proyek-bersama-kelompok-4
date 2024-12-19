@@ -84,40 +84,35 @@ class DashboardController extends Controller
     } elseif ($user->role === 'Kemahasiswaan' || $user->role === 'Keasramaan') {
       // Kemahasiswaan & Keasramaan: View all pelanggaran
       $pelanggaran = $pelanggaranQuery->orderBy('created_at', 'desc')->paginate(10);
-    } else {
-      // Default: admin has master access
-      $pelanggaran = $pelanggaranQuery->orderBy('created_at', 'desc')->paginate(10);
     }
 
-    // Filter for "Pelanggaran Butuh Tanggapan" (violations that need immediate response)
+    // Filter for "Pelanggaran yg butuh tanggapan"
     $urgentPelanggaran = collect();  // Empty collection by default
 
-    // Update logic for "Butuh Tanggapan" based on role and level
     if ($user->role === 'Dosen') {
-      // Dosen: Show pelanggaran with level "Level 1" that need immediate response
+      // Dosen: Show Level 1 that need response
       $urgentPelanggaran = Pelanggaran::where('level', 'Level 1')
         ->where('status', 'Sedang diproses')
         ->whereHas('user', function ($q) use ($user) {
           $q->where('wali', $user->nama);
         })->get();
     } elseif ($user->role === 'Kemahasiswaan') {
-      // Kemahasiswaan: Show pelanggaran with level "Level 2" that need immediate response
+      // Kemahasiswaan: Show Level 2 that need response
       $urgentPelanggaran = Pelanggaran::where('level', 'Level 2')
         ->where('status', 'Sedang diproses')
         ->get();
     } elseif ($user->role === 'Komisi Disiplin') {
-      // Komisi Disiplin: Show pelanggaran with level "Level 3" that need immediate response
+      // Komisi Disiplin: Show Level 3 that need response
       $urgentPelanggaran = Pelanggaran::where('level', 'Level 3')
         ->where('status', 'Sedang diproses')
         ->get();
     } elseif ($user->role === 'Rektor') {
-      // Rektor: Show pelanggaran with level "Level 4" that need immediate response
+      // Rektor: Show Level 4 that need response
       $urgentPelanggaran = Pelanggaran::where('level', 'Level 4')
         ->where('status', 'Sedang diproses')
         ->get();
     }
 
-    // Pass data to the view with pagination and urgent pelanggaran
     return view('dashboard.admin', compact('pelanggaran', 'urgentPelanggaran'));
   }
 
@@ -135,7 +130,7 @@ class DashboardController extends Controller
 
     $query = Pelanggaran::with('user', 'listPelanggaran');
 
-    // Terapkan filter berdasarkan role
+    // Filter based on role
     if ($user->role === 'Orang Tua') {
       $query->where('user_id', $user->id);
     }
@@ -165,11 +160,28 @@ class DashboardController extends Controller
 
     $pelanggaran = $query->orderBy('created_at', 'desc')->paginate(10);
 
-    // Tentukan view berdasarkan role
-    if ($user->role === 'Orang Tua') {
-      return view('fitur.pelanggaranMahasiswa', compact('pelanggaran', 'user'));
-    } else {
-      return view('dashboard.admin', compact('pelanggaran'));
+    $urgentPelanggaran = collect();
+
+    if ($user->role === 'Dosen') {
+      $urgentPelanggaran = Pelanggaran::where('level', 'Level 1')
+        ->where('status', 'Sedang diproses')
+        ->whereHas('user', function ($q) use ($user) {
+          $q->where('wali', $user->nama);
+        })->get();
+    } elseif ($user->role === 'Kemahasiswaan') {
+      $urgentPelanggaran = Pelanggaran::where('level', 'Level 2')
+        ->where('status', 'Sedang diproses')
+        ->get();
+    } elseif ($user->role === 'Komisi Disiplin') {
+      $urgentPelanggaran = Pelanggaran::where('level', 'Level 3')
+        ->where('status', 'Sedang diproses')
+        ->get();
+    } elseif ($user->role === 'Rektor') {
+      $urgentPelanggaran = Pelanggaran::where('level', 'Level 4')
+        ->where('status', 'Sedang diproses')
+        ->get();
     }
+
+    return view('dashboard.admin', compact('pelanggaran', 'urgentPelanggaran'));
   }
 }

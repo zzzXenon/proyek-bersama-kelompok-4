@@ -4,7 +4,7 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    <!-- Google Fonts (Pastikan font 'Source Sans 3' terimport) -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3&display=swap" rel="stylesheet">
     <style>
         body {
@@ -37,36 +37,43 @@
     @endif
 
     <div>
-        <!-- Pelanggaran Form -->
+        <!-- Form Tambah Pelanggaran -->
         <form action="{{ route('pelanggaran.store') }}" method="POST" class="p-4 rounded" style="max-width: 600px; margin-top: 80px; margin-left: 250px; box-shadow: 0px 0px 30px rgba(90, 173, 194, 0.54)" enctype="multipart/form-data">
             <h2 class="text-center mb-5">Form Pelanggaran</h2>
             @csrf
 
-            <!-- Angkatan Textbox -->
+            <!-- Angkatan -->
             <div class="mb-3">
                 <label for="angkatan" class="form-label" style="font-weight: normal;">Angkatan:</label>
-                <input type="text" name="angkatan" id="angkatan" class="form-control">
+                <select name="angkatan" id="angkatan" class="form-select w-100">
+                    <option value="">Pilih Angkatan</option>
+                    @foreach ($angkatanOptions as $angkatan)
+                        <option value="{{ $angkatan }}">
+                            {{ $angkatan }}
+                        </option>
+                    @endforeach
+                </select>
+                
+                @if ($errors->has('angkatan'))
+                    <div class="text-danger">{{ $errors->first('angkatan') }}</div>
+                @endif
             </div>
 
-            <!-- Prodi Textbox -->
+            <!-- Prodi -->
             <div class="mb-3">
                 <label for="prodi" class="form-label" style="font-weight: normal;">Prodi:</label>
-                <input type="text" name="prodi" id="prodi" class="form-control">
+                <select name="prodi" id="prodi" class="form-select w-100">
+                    <option value="">Pilih Prodi</option>
+                </select>
             </div>
 
-            <!-- NIM Textbox -->
+            <!-- NIM -->
             <div class="mb-3">
                 <label for="nim" class="form-label" style="font-weight: normal;">NIM:</label>
                 <input type="text" name="nim" id="nim" class="form-control">
             </div>
 
-            <!-- Nama Textbox -->
-            <div class="mb-3">
-                <label for="nama" class="form-label" style="font-weight: normal;">Nama:</label>
-                <input type="text" name="nama" id="nama" class="form-control">
-            </div>
-
-            <!-- Jenis Pelanggaran Dropdown -->
+            <!-- Jenis Pelanggaran -->
             <div class="mb-3">
                 <label for="poin_pelanggaran" class="form-label">Jenis Pelanggaran:</label>
                 <select name="list_pelanggaran_id" id="poin_pelanggaran" class="form-select">
@@ -82,13 +89,13 @@
                 @endif
             </div>
 
-            <!-- Laporan Comment Textbox -->
+            <!-- Laporan/Tanggapan -->
             <div class="mb-3">
                 <label for="comment" class="form-label">Laporan:</label>
                 <textarea name="comment" id="comment" class="form-control" rows="4" required>{{ old('comment') }}</textarea>
             </div>
 
-            <!-- File Upload (Optional) -->
+            <!-- File Upload (Opsional) -->
             <div class="mb-3">
                 <label for="file" class="form-label">Lampirkan File (Opsional):</label>
                 <input type="file" name="file" id="file" class="form-control">
@@ -173,8 +180,43 @@
             $('#poin_pelanggaran').select2({
                 placeholder: 'Pilih Jenis Pelanggaran',
                 allowClear: true,
-                width: '100%'  // Menyesuaikan lebar dropdown dengan container
+                width: '100%'
             });
+        });
+    </script>
+
+    <script>
+        document.getElementById('angkatan').addEventListener('change', function () {
+            const angkatan = this.value;
+            const prodiDropdown = document.getElementById('prodi');
+            
+            // Clear existing options
+            prodiDropdown.innerHTML = '<option value="">Pilih Prodi</option>';
+
+            if (angkatan) {
+                // Make AJAX request to fetch prodies
+                fetch('/get-prodi-by-angkatan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({ angkatan }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Populate Prodi dropdown
+                    data.forEach(prodi => {
+                        const option = document.createElement('option');
+                        option.value = prodi;
+                        option.textContent = prodi;
+                        prodiDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching Prodi:', error);
+                });
+            }
         });
     </script>
 @endsection

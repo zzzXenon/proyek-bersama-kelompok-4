@@ -26,6 +26,19 @@ class UsersTableSeeder extends Seeder
                 'image' => '/img/pp.jpg'
             ],
             [
+                'nama' => 'Joe Roegan',
+                'username' => 'ifs21001',
+                'password' => Hash::make('admin'),
+                'angkatan' => '2021',
+                'nim' => '11S21001',
+                'email' => 'jre@del.ac.id',
+                'kelas' => 'Kelas B',
+                'prodi' => 'S1 Filsafat',
+                'wali' => 'Dr. Johannes Harungguan Sianipar, S.T., M.T.',
+                'role' => 'Orang Tua',
+                'image' => '/img/pp.jpg'
+            ],
+            [
                 'nama' => 'Dr. Arnaldo Marulitua Sinaga, S.T, M.InfoTech',
                 'username' => 'rektor',
                 'password' => Hash::make('admin'),

@@ -29,18 +29,30 @@ class PelanggaranController extends Controller
     {
         $poinPelanggaran = $this->getPoinPelanggaran();
 
-        // Return the form view
-        return view('fitur.addPelanggaran', compact('poinPelanggaran'));
+        // Example: Retrieve a list of unique "angkatan" from the User model
+        $angkatanOptions = User::select('angkatan')->distinct()->pluck('angkatan');
+
+        return view('fitur.addPelanggaran', compact('poinPelanggaran', 'angkatanOptions'));
     }
+
+    public function getProdiByAngkatan(Request $request)
+    {
+        $angkatan = $request->input('angkatan');
+
+        // Fetch prodies related to the selected angkatan
+        $prodies = User::where('angkatan', $angkatan)->distinct()->pluck('prodi');
+
+        return response()->json($prodies);
+    }
+
 
     public function store(Request $request)
     {
         // Validate the incoming request
         $validatedData = $request->validate([
-            'angkatan' => 'required|string',
+            'angkatan' => 'required|string|in:' . implode(',', User::select('angkatan')->distinct()->pluck('angkatan')->toArray()),
             'prodi' => 'required|string',
             'nim' => 'required|string',
-            'nama' => 'required|string',
             'list_pelanggaran_id' => 'required|exists:list_pelanggaran,id',
             'comment' => 'required|string|max:500', // Validate the comment field
             'file' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // Optional file validation for comment
@@ -50,7 +62,6 @@ class PelanggaranController extends Controller
         $user = User::where('angkatan', $request->angkatan)
             ->where('prodi', $request->prodi)
             ->where('nim', $request->nim)
-            ->where('nama', $request->nama)
             ->first();
 
         // Check if the user exists and has the correct role

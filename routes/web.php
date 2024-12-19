@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PelanggaranController;
 
-// Home Route
+// Home
 Route::get('/', function () {
     if (Auth::check()) {
         $user = Auth::user();
@@ -16,19 +16,18 @@ Route::get('/', function () {
     return redirect()->route('login');
 })->name('home');
 
-// Login Routes
+// Login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Dashboard Routes (Role-based)
 Route::middleware(['auth'])->group(function () {
 
-    // Dashboard Routes
+    // Dashboard 
     Route::get('/dashboard/orangtua', [DashboardController::class, 'showDashboardOrangtua'])->name('dashboard.orangtua');
     Route::get('/dashboard/admin', [DashboardController::class, 'showDashboardAdmin'])->name('dashboard.admin');
 
-    // Pelanggaran Routes
+    // Pelanggaran 
     Route::prefix('pelanggaran')->group(function () {
         Route::get('/add', [PelanggaranController::class, 'create'])->name('pelanggaran.create');
         Route::post('/add', [PelanggaranController::class, 'store'])->name('pelanggaran.store');
@@ -45,11 +44,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/{id}/update-level', [PelanggaranController::class, 'updateLevel'])->name('pelanggaran.updateLevel');
         Route::patch('/{pelanggaran}/update-level', [PelanggaranController::class, 'updateLevel'])->name('pelanggaran.updateLevel');
 
-        // Search Route for Pelanggaran
+        // Search 
         Route::get('/search', [DashboardController::class, 'search'])->name('pelanggaran.search');
     });
 
-    // Additional Routes for Pelanggaran Mahasiswa
+    // Pelanggaran Mahasiswa
     Route::get('/pelanggaran-mahasiswa', [PelanggaranController::class, 'showPelanggaranMhs'])->name('pelanggaranMahasiswa');
     Route::get('/pelanggaran-mahasiswa/{id}/', [PelanggaranController::class, 'showDetailMahasiswa'])->name('pelanggaranMahasiswa.detail');
+
+    Route::post('/get-prodi-by-angkatan', [PelanggaranController::class, 'getProdiByAngkatan'])->name('getProdiByAngkatan');
 });
