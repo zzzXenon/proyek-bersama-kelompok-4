@@ -59,11 +59,12 @@
 
         @if ($comment->file_path)
             <p>
-                <a href="{{ asset('storage/files/' . $comment->file) }}" class="btn btn-sm mt-2" style="background-color: #5AADC2; color: white;" download>
+                <a href="{{ asset('storage/' . $comment->file_path) }}" class="btn btn-sm mt-2" style="background-color: #5AADC2; color: white;" download>
                     Download Attached File
                 </a>
             </p>
         @endif
+
     </div>
     @endforeach
 </div>

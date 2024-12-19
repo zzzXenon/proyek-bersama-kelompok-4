@@ -27,7 +27,6 @@ class PelanggaranController extends Controller
 
     public function create()
     {
-        // Use the helper function
         $poinPelanggaran = $this->getPoinPelanggaran();
 
         // Return the form view
@@ -199,7 +198,7 @@ class PelanggaranController extends Controller
         // Handle file upload
         $filePath = null;
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('files', 'public');
+            $filePath = $request->file('file')->store('pelanggaran_files', 'public');
         }
 
         Comment::create([

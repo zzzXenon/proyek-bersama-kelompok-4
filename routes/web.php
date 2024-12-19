@@ -36,6 +36,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/comments', [PelanggaranController::class, 'showComments'])->name('pelanggaran.showComments');
         Route::post('/{id}/comments', [PelanggaranController::class, 'storeComment'])->name('pelanggaran.storeComment');
 
+        Route::get('/no-response', function () {
+            return view('fitur.detailAdmin-no-response');
+        })->name('fitur.detailAdmin-no-response');
+
         Route::get('/update', [PelanggaranController::class, 'updatePelanggaran'])->name('updatePelanggaran');
         Route::post('/{id}/update-status', [PelanggaranController::class, 'updateStatus'])->name('pelanggaran.updateStatus');
         Route::post('/{id}/update-level', [PelanggaranController::class, 'updateLevel'])->name('pelanggaran.updateLevel');
@@ -44,10 +48,6 @@ Route::middleware(['auth'])->group(function () {
         // Search Route for Pelanggaran
         Route::get('/search', [DashboardController::class, 'search'])->name('pelanggaran.search');
     });
-
-    Route::get('/pelanggaran/no-response', function () {
-        return view('fitur.detailAdmin-no-response');
-    })->name('fitur.detailAdmin-no-response');
 
     // Additional Routes for Pelanggaran Mahasiswa
     Route::get('/pelanggaran-mahasiswa', [PelanggaranController::class, 'showPelanggaranMhs'])->name('pelanggaranMahasiswa');
